@@ -53,7 +53,14 @@ module Wisper
     private
 
     def with_mutex
-      mutex.synchronize { yield }
+      val = nil
+      Rails.logger.info "Attemping to acquire wisper mutex"
+      mutex.synchronize do
+        Rails.logger.info "Acquired wisper mutex"
+        val = yield
+      end
+      Rails.logger.info "Released wisper mutex"
+      val
     end
   end
 end
